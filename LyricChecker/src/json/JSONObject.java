@@ -15,7 +15,37 @@ public class JSONObject extends JSONValue {
 	public JSONValue get (String key) {
 		return data.get(key);
 	}
-
+	
+	public JSONObject getObject (String key) {
+		JSONValue fetched = data.get(key);
+		if (!(fetched instanceof JSONObject)) throw new JSONException("'"+key+"' is not an object.");
+		return (JSONObject) fetched;
+	}
+	
+	public JSONArray getArray (String key) {
+		JSONValue fetched = data.get(key);
+		if (!(fetched instanceof JSONArray)) throw new JSONException("'"+key+"' is not an array.");
+		return (JSONArray) fetched;
+	}
+	
+	public JSONString getString (String key) {
+		JSONValue fetched = data.get(key);
+		if (!(fetched instanceof JSONString)) throw new JSONException("'"+key+"' is not a string.");
+		return (JSONString) fetched;
+	}
+	
+	public JSONNumber getNumber (String key) {
+		JSONValue fetched = data.get(key);
+		if (!(fetched instanceof JSONNumber)) throw new JSONException("'"+key+"' is not a number.");
+		return (JSONNumber) fetched;
+	}
+	
+	public JSONBoolean getBoolean (String key) {
+		JSONValue fetched = data.get(key);
+		if (!(fetched instanceof JSONBoolean)) throw new JSONException("'"+key+"' is not a boolean.");
+		return (JSONBoolean) fetched;
+	}
+	
 	public String[] keys () {
 		return data.keySet().toArray(new String[data.size()]);
 	}
