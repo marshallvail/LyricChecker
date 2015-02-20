@@ -31,7 +31,7 @@ public class GUI
     JLabel artist = new JLabel("Artist: ");
     JLabel song = new JLabel("Song: ");
     JLabel album = new JLabel("Album: ");
-   
+    
     artistField = new JTextField(40);
     songField = new JTextField(40);
     albumField = new JTextField(40);
@@ -142,9 +142,9 @@ public class GUI
   {
     output.setText(null);
     LyricChecker l = new LyricChecker(artistField.getText(), songField.getText());
-    if(l.getSong() != null && l.getArtist() != null && l.getBadWordsOutput() != null)
+    if(l.getSong() != null && l.getArtist() != null && l.getBadWords() != null)
     {
-      String bad = l.getBadWordsOutput();
+      String bad = l.getBadWords();
       //int indexQ = bad.indexOf("Questionable");
       output.append(l.getSong() + " by " + l.getArtist() + "\n" + bad);
       if(!l.hasBadWords() && !l.hasQWords())
