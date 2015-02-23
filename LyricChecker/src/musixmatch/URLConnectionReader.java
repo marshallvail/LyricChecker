@@ -1,8 +1,11 @@
 package musixmatch;
-// credit: Joseph Weissman http://stackoverflow.com/questions/4328711/read-url-to-string-in-few-lines-of-java-code
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Scanner;
-import java.io.*;
+
+// credit: Joseph Weissman http://stackoverflow.com/questions/4328711/read-url-to-string-in-few-lines-of-java-code
 
 public class URLConnectionReader {
 	public static String getText(String url) throws Exception {

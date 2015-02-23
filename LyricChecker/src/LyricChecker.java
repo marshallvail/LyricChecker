@@ -1,10 +1,7 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-import java.awt.event.*;  //for ActionListener, ActionEvent
-import javax.swing.*;  //for JFrame, BoxLayout, JLabel, JTextField, JButton
-import java.util.LinkedList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Scanner;
+import musixmatch.URLConnectionReader;
 
 public class LyricChecker
 {
@@ -37,6 +34,7 @@ public class LyricChecker
     System.out.println(l.getQWords()+"\n");
     Scanner scan = new Scanner(System.in);
     l.addBadWord(scan.next());
+    scan.close();
     System.out.println(l.getBadWords()+"\n");
   }
   
@@ -70,6 +68,7 @@ public class LyricChecker
       scan.next();
       scan.useDelimiter("<!-- end of lyrics -->");
       songLyrics = scan.next().substring(23);
+      scan.close();
     }
     catch(Exception ex)
     {
@@ -100,6 +99,7 @@ public class LyricChecker
       scan.next();
       scan.useDelimiter("</div>");
       songLyrics = scan.next();
+      scan.close();
     }
     catch(Exception ex)
     {}
@@ -107,8 +107,6 @@ public class LyricChecker
   
   public String findBadWords(String lyrics)
   {         
-    String webText;
-    Scanner scan;
     hasBadWords = true;
     hasQWords = true;
     String bad = "Bad words: ";

@@ -52,7 +52,7 @@ public class MusixMatch {
 	}
 	
 	public Playlist album (int id) {
-		
+		//
 	}
 	
 	public Playlist albumSearch (String album, String artist) throws Exception {

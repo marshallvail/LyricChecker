@@ -18,7 +18,7 @@ public class Track {
 	}
 	
 	public String toString () {
-		return name;
+		return getName();
 	}
 		
 }

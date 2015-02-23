@@ -1,5 +1,4 @@
 package musixmatch;
-
 import java.util.Iterator;
 
 public class Playlist implements Iterator<Track> {

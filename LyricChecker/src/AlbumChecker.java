@@ -1,11 +1,10 @@
 import java.util.Scanner;
-import java.util.LinkedList;
+import musixmatch.URLConnectionReader;
 
 public class AlbumChecker
 {
   private String albumText;
   private int numSongs;
-  private LinkedList<String> songs;
   public String out;
   //for album processing
   //scan to "album\">", then scan to "<b>", then scan to " <\b>" for album name
