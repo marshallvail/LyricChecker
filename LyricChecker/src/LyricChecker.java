@@ -13,9 +13,11 @@ public class LyricChecker
   private String songLyrics;
   private String artistText;
   private String songText;
-  private String badWords;
+  private String badWordsOutput;
   private boolean hasBadWords;
   private boolean hasQWords;
+  LinkedList<String> badWords;
+  LinkedList<String> qWords;
   //private boolean urlInvalid;
   
   //input artist and song; get song lyrics; 
@@ -23,15 +25,19 @@ public class LyricChecker
   //deal with apostrophes and stuff;
   public LyricChecker(String artist, String song)  //takes in human input artist and song
   { 
-    useAZ(artist, song);
-    badWords = findBadWords(songLyrics);
+    useMetro(artist, song);
+    badWords = new LinkedList<String>(Arrays.asList("asshole","bitch","cocksucker","cunt","dick","fuck","nigga","nigger","piss","pussy","shit"));
+    qWords = new LinkedList<String>(Arrays.asList(" ass ","bastard","damn","hell","sex"));
+    badWordsOutput = findBadWords(songLyrics);
   }
   public static void main(String[] args)
   {
-//    LyricChecker l = new LyricChecker("eminem", "cold wind blows");
-//    System.out.println(l.getLyrics());
-    LyricChecker c = new LyricChecker("eminem", "lose yourself");
-    System.out.println(c.getLyrics());
+    LyricChecker l = new LyricChecker("eminem", "cold wind blows");
+    System.out.println(l.getBadWords()+"\n");
+    System.out.println(l.getQWords()+"\n");
+    Scanner scan = new Scanner(System.in);
+    l.addBadWord(scan.next());
+    System.out.println(l.getBadWords()+"\n");
   }
   
   public void useAZ(String artist, String song)
@@ -53,16 +59,12 @@ public class LyricChecker
       scan.useDelimiter("\"");
       scan.next();
       artistText = scan.next();
-//      if(artistText.length() > 20)
-//        artistText = artistText.substring(0, 17) + "...";
       
       scan.useDelimiter("song: \"");
       scan.next();
       scan.useDelimiter("\"");
       scan.next();
       songText = scan.next();
-//      if(songText.length() > 20)
-//        songText = songText.substring(0, 17) + "...";
       
       scan.useDelimiter("<!-- start of lyrics -->");
       scan.next();
@@ -75,15 +77,33 @@ public class LyricChecker
     }
   }
   
-//  public void useMetro(String artist, String song)
-//  {
-//    String webText;
-//    Scanner scan;
-//    artist  = processMetro(artist);
-//    song  = processMetro(song);
-//    webText = URLConnectionReader.getText("http://www.metrolyrics.com/"+song+"-lyrics-"+artist+".html");
-//    scan = new Scanner(webText);
-//  }
+  public void useMetro(String artist, String song)
+  {
+    String webText;
+    artist  = processMetro(artist);
+    song  = processMetro(song);
+    try
+    {
+      webText = URLConnectionReader.getText("http://www.metrolyrics.com/printlyric/"+song+"-lyrics-"+artist+".html");
+      Scanner scan = new Scanner(webText);
+      scan.useDelimiter("<h1>");
+      scan.next();
+      scan.useDelimiter(" Lyrics</h1>");
+      songText = scan.next().substring(4);
+      
+      scan.useDelimiter("<h2>by ");
+      scan.next();
+      scan.useDelimiter("</h2>");
+      artistText = scan.next().substring(7);
+      
+      scan.useDelimiter("<p class=\"lyrics-body\"><p class='verse'>");
+      scan.next();
+      scan.useDelimiter("</div>");
+      songLyrics = scan.next();
+    }
+    catch(Exception ex)
+    {}
+  }
   
   public String findBadWords(String lyrics)
   {         
@@ -93,8 +113,6 @@ public class LyricChecker
     hasQWords = true;
     String bad = "Bad words: ";
     String q = "Questionable words: ";
-    LinkedList<String> badWords = new LinkedList<String>(Arrays.asList("asshole","bitch","cocksucker","cunt","dick","fuck","nigga","nigger","piss","pussy","shit"));
-    LinkedList<String> qWords = new LinkedList<String>(Arrays.asList(" ass ","bastard","damn","hell","sex"));
     for(int i = 0; i < badWords.size(); i++)
     {
       String currBWord = badWords.get(i);
@@ -108,6 +126,8 @@ public class LyricChecker
       String currQWord = qWords.get(i);
       if(lyrics.indexOf(currQWord) != -1)
       {
+        if(currQWord.equals(" ass "))
+          currQWord = "ass";
         q = q + currQWord + "; ";
       }
     }
@@ -124,49 +144,6 @@ public class LyricChecker
     bad = bad.substring(0, bad.length()-2) + ". ";
     q = "\n" + q.substring(0, q.length()-2) + ". ";
     return bad + q;
-    
-//    hasBadWords = true;      //original method
-//    hasQWords = true;
-//    String bad = "Bad words: ";
-//    if(lyrics.indexOf("fuck") != -1)
-//      bad = bad + "f**k; ";
-//    if(lyrics.indexOf("shit") != -1)
-//      bad = bad + "s**t; ";
-//    if(lyrics.indexOf("bitch") != -1)
-//      bad = bad + "b***h; ";
-//    if(lyrics.indexOf("nigga") != -1)
-//      bad = bad + "n***a; ";
-//    if(lyrics.indexOf("cunt") != -1)
-//      bad = bad + "c**t; ";
-//    if(lyrics.indexOf("asshole") != -1)
-//      bad = bad + "a*****e; ";
-//    if(lyrics.indexOf("dick") != -1)
-//      bad = bad + "d**k; ";
-//    if(lyrics.indexOf("pussy") != -1)
-//      bad = bad + "p***y; ";
-//    if(bad.equals("Bad words: "))
-//    {
-//      bad = bad + "none found! ";
-//      hasBadWords = false;
-//    }
-//    bad = bad.substring(0, bad.length()-2) + ". ";
-//    
-//    bad = bad + "\nQuestionable words: "; 
-//    
-//    if(lyrics.indexOf("hell") != -1)
-//      bad = bad + "hell; ";
-//    if(lyrics.indexOf("sex") != -1)
-//      bad = bad + "sex; ";
-//    if(lyrics.indexOf("damn") != -1)
-//      bad = bad + "damn; ";
-//    if(lyrics.indexOf(" ass ") != -1)
-//      bad = bad + "ass; ";
-//    if(bad.substring(bad.length()-20).equals("Questionable words: "))
-//    {
-//      bad = bad + "none found! ";
-//      hasQWords = false;
-//    }
-//    return bad.substring(0, bad.length()-2) + ".";
   }
   public static String processAZ(String songOrArtist)
   {
@@ -201,18 +178,43 @@ public class LyricChecker
     songOrArtist = songOrArtist.replaceAll("\\s","-");
     return songOrArtist;
   }
+  
+  public void addBadWord(String s)
+  {
+    badWords.add(s);
+  }
+  
+  public void removeBadWord(String s)
+  {
+    badWords.remove(s);
+  }
+  
+  public void addQWord(String s)
+  {
+    qWords.add(s);
+  }
+  
+  public void removeQWord(String s)
+  {
+    qWords.remove(s);
+  }
+  
   public String getLyrics()
   { return songLyrics; }
   public String getArtist()
   { return artistText; }
   public String getSong()
   { return songText; }
-  public String getBadWords()
-  { return badWords; }
+  public String getBadWordsOutput()
+  { return badWordsOutput; }
   public boolean hasBadWords()
   { return hasBadWords; }
   public boolean hasQWords()
   { return hasQWords; }
+  public LinkedList<String> getBadWords()
+  { return badWords; }
+  public LinkedList<String> getQWords()
+  { return qWords; }
   //public boolean isURLInvalid()
   //{ return urlInvalid; }
   //for album processing
