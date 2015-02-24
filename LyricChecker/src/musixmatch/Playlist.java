@@ -1,7 +1,7 @@
 package musixmatch;
 import java.util.Iterator;
 
-public class Playlist implements Iterator<Track> {
+public class Playlist implements Iterable<Track>, Iterator<Track> {
 	private String name;
 	private Track[] tracks;
 	private int i;
@@ -40,6 +40,10 @@ public class Playlist implements Iterator<Track> {
 			data += "  "+t+"\r\n";
 		}
 		return data;
+	}
+	
+	public Iterator<Track> iterator () {
+		return this;
 	}
 	
 }
